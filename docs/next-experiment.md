@@ -3,6 +3,8 @@
 **الهدف:** معرفة شكل الرسائل على خدمة JieLi (RFCOMM 10، UUID `fe010000-1234-5678-abcd-00805f9b34fb`) **دون** أن يرسل أي شيء من عندنا إلى السماعة. نحن نراقب فقط ما يرسله تطبيق oraimo الرسمي.
 
 > إذا لم يدعم هاتفك «سجل تطفّل Bluetooth HCI» (مثل OPPO Reno 13F)، ابدأ بـ [`android-bugreport.md`](android-bugreport.md).
+>
+> بديل من جهة الأندرويد بهاتف عليه root: [`frida-rcsp.md`](frida-rcsp.md) يراقب مقابس التطبيق سلبيًا ويحدد **أي fd يحمل RCSP** (‏`tools/frida_rcsp_probe.js` + `tools/frida_capture.py`).
 
 ## المتطلبات
 

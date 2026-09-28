@@ -133,6 +133,7 @@ FE DC BA | FLAG | OPCODE | LEN (2 بايت) | PAYLOAD (LEN بايت) | EF
 - الاتصال يتم بـ `createRfcommSocketToServiceRecord(uuid)`. أي أن Android يبحث عن الـ UUID في SDP ويختار القناة منه، وهي في حالة سماعتنا `fe010000-…` ← RFCOMM 10 (SDP في الالتقاط).
 - الـ UUID يأتي من `BluetoothOption.getSppUUID()`، أي **يُضبط عند تهيئة المكتبة** ولا يظهر ثابتًا هنا. أول ما تصل قيمته الفعلية من صنف التهيئة نضيفه.
 - إذا لم يجد التطبيق الـ UUID في الجهاز، يكتب تحذيرًا في السجل فقط ويكمل. الكتابة الفعلية عبر `writeDataToSppDevice` → `socket.getOutputStream().write()`.
+- **لتحديد أي مقبس/‏fd يحمل هذا النقل أثناء التشغيل** (بمراقبة سلبية على هاتف عليه root): راجع [`frida-rcsp.md`](frida-rcsp.md). يراقب `tools/frida_rcsp_probe.js` استدعاءات المقابس ويرصد الإطار `FE DC BA … EF`، و`agent/rcsp_fd.py` يقرر أي fd يحمل RCSP فعليًا. لا يفتح شيئًا ولا يرسل بايتًا.
 
 ## 5. القناة مصادَق عليها (من `RcspAuth`) — أهم نتيجة أمنية
 
