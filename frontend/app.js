@@ -614,6 +614,7 @@ async function fetchDiscovery() {
       disc.loadedLog = true;
     }
     renderDiscovery();
+    renderAdvanced();
   } catch (e) {
     if (state.agent === "online") toast(e.message, "bad");
   }
@@ -872,6 +873,44 @@ function renderAnalysis(a) {
       : h("p", { class: "hint", text: "لا توجد حزم خاصة بالمصنّع في هذا الملف." }));
 }
 
+// ------------------------------------------------------------------ advanced (RCSP inspector, read-only)
+const hex2 = (n) => (n == null ? "—" : "0x" + n.toString(16).toUpperCase().padStart(2, "0"));
+
+function renderAdvanced() {
+  if (state.route !== "advanced") return;
+  const box = $("#rcsp-inspector");
+  if (!box) return;
+  const a = disc.data?.analysis;
+  if (!a) {
+    box.replaceChildren(h("p", { class: "empty-inline" }, "لم تُحلَّل أي التقاطات بعد. ",
+      h("a", { class: "link", href: "#/discovery" }, "افتح اكتشاف الإمكانيات لتحميل ملف", icon("chevron"))));
+    return;
+  }
+  const rcsp = a.summary?.rcsp;
+  if (!rcsp || !rcsp.frames) {
+    box.replaceChildren(h("p", { class: "empty-inline", text: "لا توجد إطارات JieLi RCSP في آخر التقاط محلَّل — غالبًا لأن قناة RFCOMM 10 لم تُفتح في هذا الملف." }));
+    return;
+  }
+  const stat = (n, label) => h("div", { class: "rcsp-stat" }, h("b", { text: String(n) }), h("span", { text: label }));
+  const stats = h("div", { class: "rcsp-stats" },
+    stat(rcsp.frames, "إطار RCSP"), stat(rcsp.commands, "أوامر/إشعارات"), stat(rcsp.replies, "ردود"));
+  const ops = Object.entries(rcsp.opcodes || {});
+  const opsRow = h("div", {}, ...ops.map(([name, n]) => h("span", { class: "rcsp-op" }, h("code", { text: name }), ` ×${n}`)));
+  const table = h("div", { class: "table-wrap" }, h("table", { class: "rtable" },
+    h("thead", {}, h("tr", {}, ...["الوقت", "الاتجاه", "النوع", "Opcode", "XM", "SN", "الحالة", "يحتاج ردًا", "البيانات"].map((x) => h("th", { text: x })))),
+    h("tbody", {}, ...(rcsp.samples || []).map((f) => h("tr", {},
+      td("الوقت", h("span", { class: "mono", text: fmtTs(f.ts) })),
+      td("الاتجاه", h("span", { text: f.direction_label })),
+      td("النوع", h("span", { text: f.kind })),
+      td("Opcode", h("code", { text: f.opcode_name })),
+      td("XM", h("code", { text: f.xm_opcode != null ? hex2(f.xm_opcode) : "—" })),
+      td("SN", h("span", { text: f.sn != null ? String(f.sn) : "—" })),
+      td("الحالة", h("span", { text: f.status != null ? String(f.status) : "—" })),
+      td("يحتاج ردًا", h("span", { text: f.needs_reply ? "نعم" : "لا" })),
+      td("البيانات", h("span", { class: "mono raw", text: f.data || "—" })))))));
+  box.replaceChildren(stats, h("p", { class: "hint", text: "الرموز المرصودة في الالتقاط:" }), opsRow, table);
+}
+
 function dlogMatches(e, f) {
   if (f === "all") return true;
   if (f === "vendor") return e.classification === "vendor" || e.classification === "controller_vendor";
@@ -967,7 +1006,7 @@ const ROUTES = {
   device: ["معلومات الجهاز", "هوية السماعة كما أثبتها الالتقاط وكما يعرضها BlueZ"],
   diagnostics: ["التشخيص", "ما يعمل فعلًا الآن، وما هو معلن فقط"],
   log: ["سجل الأحداث", "كل ما رصده الوكيل المحلي بالترتيب الزمني"],
-  advanced: ["التحكم المتقدم", "لم يتم اكتشاف بروتوكول آمن لهذه الوظائف بعد"],
+  advanced: ["التحكم المتقدم", "فك إطارات RCSP من التقاط محفوظ وخريطة الأوامر المعروفة — قراءة فقط، بلا إرسال"],
   settings: ["الإعدادات", "المظهر ومشغل الوسائط والوكيل المحلي"],
 };
 
@@ -983,7 +1022,7 @@ function route() {
   setText("#page-subtitle", sub);
   document.title = `${title} — متحكم Necklace`;
   render();
-  if (state.route === "discovery") fetchDiscovery();
+  if (state.route === "discovery" || state.route === "advanced") fetchDiscovery();
 }
 
 // ------------------------------------------------------------------ render root
@@ -997,6 +1036,7 @@ function render() {
   if (state.route === "diagnostics") renderDiagnostics();
   if (state.route === "settings") renderSettings();
   if (state.route === "discovery") renderDiscovery();
+  if (state.route === "advanced") renderAdvanced();
 }
 
 // ------------------------------------------------------------------ events

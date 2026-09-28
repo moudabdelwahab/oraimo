@@ -4,8 +4,12 @@ This module never talks to Bluetooth hardware. It reads btsnoop files written
 by ``btmon -w`` (Linux monitor format, datalink 2001) or Android HCI snoop
 logs (H4, datalink 1002), reassembles L2CAP, and decodes the protocols seen
 in the capture: HCI, L2CAP signaling, SDP, RFCOMM/HFP, AVCTP/AVRCP, AVDTP,
-HID and ATT. Every packet is classified as standard, documented extension,
-vendor-specific, or unknown. Link keys and PIN codes are masked.
+HID and ATT. It also decodes the JieLi RCSP transport *envelope*
+(``FE DC BA .. EF``) on the custom channel, but only the fields proven by the
+static analysis in ``docs/jieli-rcsp-apk.md`` -- the command payloads stay raw
+because the opcode table and AttrBean wire layout are still unknown. Every
+packet is classified as standard, documented extension, vendor-specific, or
+unknown. Link keys and PIN codes are masked.
 """
 
 from __future__ import annotations
@@ -108,6 +112,16 @@ L2CAP_SIG = {0x01: "Command Reject", 0x02: "Connection Request", 0x03: "Connecti
              0x0A: "Information Request", 0x0B: "Information Response"}
 RFCOMM_FRAMES = {0x2F: "SABM", 0x63: "UA", 0x0F: "DM", 0x43: "DISC", 0xEF: "UIH"}
 RFCOMM_MCC = {0x20: "PN", 0x08: "Test", 0x28: "FCon", 0x18: "FCoff", 0x38: "MSC", 0x04: "NSC", 0x24: "RPN", 0x14: "RLS"}
+
+# ---- JieLi RCSP framing (envelope only, from docs/jieli-rcsp-apk.md, static analysis).
+# We decode the transport envelope that is PROVEN in the app code and nothing more:
+# the full opcode table and the on-wire AttrBean layout are still unknown, so we never
+# invent field meanings. This is a passive decoder of captured bytes; it opens nothing
+# and sends nothing.
+RCSP_MAGIC = bytes((0xFE, 0xDC, 0xBA))   # RcspPacketParse start marker
+RCSP_END = 0xEF                          # trailer byte
+RCSP_HEADER = 7                          # magic(3) + flag(1) + opcode(1) + len(2, big-endian)
+RCSP_OPCODES = {0x01: "DataCmd", 0x11: "PushStartTtsCmd"}  # the only names confirmed in the code
 HID_TYPES = {0x0: "HANDSHAKE", 0x1: "HID_CONTROL", 0x4: "GET_REPORT", 0x5: "SET_REPORT", 0x6: "GET_PROTOCOL",
              0x7: "SET_PROTOCOL", 0xA: "DATA"}
 ATT_OPS = {0x01: "Error Response", 0x02: "Exchange MTU Request", 0x03: "Exchange MTU Response",
@@ -156,6 +170,89 @@ def hexs(b: bytes, limit: int = 96) -> str:
 
 def bdaddr(b: bytes) -> str:
     return ":".join(f"{x:02X}" for x in reversed(b[:6]))
+
+
+# ============================================================ JieLi RCSP envelope
+def rcsp_extract(buf: bytearray) -> list[bytes]:
+    """Pull complete ``FE DC BA .. EF`` frames out of *buf* (mutated in place).
+
+    Handles fragmentation: a partial frame stays in the buffer for the next
+    chunk, and leading garbage or a broken trailer is resynchronised on the
+    next magic marker. Read-only: it parses bytes and never emits any.
+    """
+    frames: list[bytes] = []
+    while True:
+        i = buf.find(RCSP_MAGIC)
+        if i < 0:
+            # keep at most 2 trailing bytes in case a magic marker is split
+            del buf[:max(0, len(buf) - (len(RCSP_MAGIC) - 1))]
+            break
+        if i:
+            del buf[:i]
+        if len(buf) < RCSP_HEADER:
+            break
+        length = (buf[5] << 8) | buf[6]        # big-endian, per CHexConver
+        total = RCSP_HEADER + length + 1        # + payload + trailer
+        if len(buf) < total:
+            break
+        if buf[total - 1] != RCSP_END:
+            del buf[:len(RCSP_MAGIC)]            # bad trailer -> resync past this magic
+            continue
+        frames.append(bytes(buf[:total]))
+        del buf[:total]
+    return frames
+
+
+def decode_rcsp_frame(frame: bytes) -> dict:
+    """Decode one RCSP frame envelope. Only proven fields; DATA stays raw."""
+    flag, opcode = frame[3], frame[4]
+    length = (frame[5] << 8) | frame[6]
+    payload = frame[RCSP_HEADER:RCSP_HEADER + length]
+    is_cmd = bool(flag & 0x80)      # bit7: command/notification vs reply
+    needs_reply = bool(flag & 0x40)  # bit6: waits for a reply
+    d: dict = {"flag": flag, "opcode": opcode, "opcode_name": RCSP_OPCODES.get(opcode, f"0x{opcode:02X}"),
+               "length": length, "is_command": is_cmd, "needs_reply": needs_reply}
+    idx = 0
+    if not is_cmd and payload:
+        d["status"] = payload[0]
+        idx = 1
+    if len(payload) > idx:
+        d["sn"] = payload[idx]
+        idx += 1
+    if opcode == 0x01 and len(payload) > idx:   # DataCmd carries an extra XM opcode
+        d["xm_opcode"] = payload[idx]
+        idx += 1
+    d["data"] = payload[idx:]
+    return d
+
+
+def rcsp_frame_json(d: dict) -> dict:
+    """JSON/websocket-safe view of a decoded frame (bytes rendered as hex)."""
+    r = {"opcode": d["opcode"], "opcode_name": d["opcode_name"],
+         "kind": "أمر/إشعار" if d["is_command"] else "رد",
+         "is_command": d["is_command"], "needs_reply": d["needs_reply"],
+         "length": d["length"], "data": d["data"].hex(" ")}
+    for k in ("sn", "status", "xm_opcode"):
+        if k in d:
+            r[k] = d[k]
+    return r
+
+
+def rcsp_summary(d: dict, count: int) -> str:
+    kind = "أمر/إشعار" if d["is_command"] else "رد"
+    tail = [d["opcode_name"]]
+    if "xm_opcode" in d:
+        tail.append(f"XM 0x{d['xm_opcode']:02X}")
+    if "sn" in d:
+        tail.append(f"SN {d['sn']}")
+    if "status" in d:
+        tail.append(f"حالة {d['status']}")
+    if d["needs_reply"]:
+        tail.append("يحتاج ردًا")
+    s = f"JieLi RCSP: {kind} — " + " · ".join(tail)
+    if count > 1:
+        s += f" (+{count - 1} إطار في نفس الحزمة)"
+    return s
 
 
 def uuid_str(b: bytes) -> str:
@@ -274,6 +371,7 @@ class Decoder:
         self.rfcomm_roles = {4: "HFP", 1: "SPP", 10: "JieLi"}  # from the capture; updated from SDP when seen
         self.on_services = on_services
         self.stats = {"records": 0, "media": 0, "noise": 0, "packets": 0}
+        self.rcsp_buf: dict[tuple, bytearray] = {}  # (channel, direction) -> reassembly buffer
 
     # -- per-handle state
     def _h(self, handle: int) -> dict:
@@ -584,13 +682,28 @@ class Decoder:
         if role == "HFP":
             return self._hfp(base, data, fields, p)
         if role == "JieLi":
-            fields["payload"] = data.hex(" ")
-            return self._pkt(**base, protocol="JieLi (RFCOMM)", opcode=f"{len(data)} بايت",
-                             summary=f"بيانات خدمة JieLi الخاصة — غير مفككة ({len(data)} بايت)",
-                             classification="vendor", raw=hexs(data, 256), fields=fields)
+            return self._jieli(base, data, fields, ch)
         return self._pkt(**base, protocol="SPP" if role == "SPP" else "RFCOMM", opcode=f"{len(data)} بايت",
                          summary=f"بيانات تسلسلية على القناة {ch} ({len(data)} بايت) — محتوى يحدده التطبيق",
                          classification="vendor" if role == "SPP" else "unknown", raw=hexs(data, 256), fields=fields)
+
+    def _jieli(self, base, data, fields, ch):
+        """Decode the JieLi RCSP transport envelope on the custom channel. Passive."""
+        fields["payload"] = data.hex(" ")
+        buf = self.rcsp_buf.setdefault((ch, base.get("direction")), bytearray())
+        buf += data
+        frames = rcsp_extract(buf)
+        if not frames:
+            return self._pkt(**base, protocol="JieLi RCSP (RFCOMM)", opcode=f"{len(data)} بايت",
+                             summary=f"بيانات JieLi RCSP — جزء غير مكتمل أو خارج الإطار ({len(data)} بايت)",
+                             classification="vendor", raw=hexs(data, 256), fields=fields)
+        decoded = [decode_rcsp_frame(f) for f in frames]
+        fields["rcsp_frames"] = [rcsp_frame_json(d) for d in decoded]
+        first = decoded[0]
+        opcode = first["opcode_name"] + (f" +{len(decoded) - 1}" if len(decoded) > 1 else "")
+        return self._pkt(**base, protocol="JieLi RCSP (RFCOMM)", opcode=opcode,
+                         summary=rcsp_summary(first, len(decoded)),
+                         classification="vendor", raw=hexs(frames[0], 256), fields=fields)
 
     def _hfp(self, base, data, fields, raw):
         text = data.decode("ascii", "replace").replace("\r", " ").replace("\n", " ").strip()
@@ -853,6 +966,7 @@ def summarize_packets(packets: list[Packet]) -> dict:
     avrcp_pdus: dict[str, int] = {}
     events: set[str] = set()
     vendor: list[dict] = []
+    rcsp = {"frames": 0, "commands": 0, "replies": 0, "opcodes": {}, "samples": []}
     for p in packets:
         by_proto[p.protocol] = by_proto.get(p.protocol, 0) + 1
         by_class[p.classification] = by_class.get(p.classification, 0) + 1
@@ -869,8 +983,16 @@ def summarize_packets(packets: list[Packet]) -> dict:
                 events.add(e)
         if p.classification == "vendor" and len(vendor) < 200:
             vendor.append(p.to_json())
+        for fr in f.get("rcsp_frames", []):
+            rcsp["frames"] += 1
+            rcsp["replies" if not fr["is_command"] else "commands"] += 1
+            name = fr["opcode_name"]
+            rcsp["opcodes"][name] = rcsp["opcodes"].get(name, 0) + 1
+            if len(rcsp["samples"]) < 100:
+                rcsp["samples"].append({"ts": p.ts, "direction": p.direction,
+                                        "direction_label": DIR_LABELS.get(p.direction, "—"), **fr})
     return {"by_protocol": by_proto, "by_classification": by_class, "passthrough": passthrough,
-            "avrcp_pdus": avrcp_pdus, "avrcp_events": sorted(events), "vendor_packets": vendor}
+            "avrcp_pdus": avrcp_pdus, "avrcp_events": sorted(events), "vendor_packets": vendor, "rcsp": rcsp}
 
 
 class CaptureTail:

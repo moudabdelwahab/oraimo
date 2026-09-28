@@ -18,8 +18,10 @@ TARGET = "28:52:E0:0F:92:0A"
 # ============================================================ decoder (unit)
 def test_decoder_on_synthetic_capture():
     t = time.time()
+    # a complete JieLi RCSP frame: FE DC BA | flag C0 (cmd+needs reply) | op 01 (DataCmd) | len 0003 | SN XM DATA | EF
+    rcsp_frame = bytes.fromhex("fedcba" "c0" "01" "0003" "0522aa" "ef")
     data = (bw.header() + bw.setup(t) + bw.passthrough(0x4B, ts=t) + bw.volume_changed(120, ts=t)
-            + bw.set_absolute_volume(64, ts=t) + bw.rfcomm_sabm(10, ts=t) + bw.rfcomm_uih(10, b"\xfe\xdc\xba\xc0\x06", ts=t)
+            + bw.set_absolute_volume(64, ts=t) + bw.rfcomm_sabm(10, ts=t) + bw.rfcomm_uih(10, rcsp_frame, ts=t)
             + bw.rfcomm_uih(4, b"AT+IPHONEACCEV=1,1,6\r", ts=t) + bw.hid_report(bytes([3, 0x20, 0, 0]), ts=t))
     r = sniffer.analyze_bytes(data, TARGET)
     pk = r["packets"]
@@ -32,10 +34,15 @@ def test_decoder_on_synthetic_capture():
     assert r["summary"]["passthrough"] == {"FORWARD (السماعة)": 1}
     assert any(p["fields"].get("volume") == 120 and p["fields"].get("ctype") == "CHANGED" for p in by("AVRCP"))
     assert any(p["fields"].get("pdu") == "SetAbsoluteVolume" and p["fields"].get("ctype") == "ACCEPTED" for p in by("AVRCP"))
-    # JieLi channel: vendor-specific, never decoded
+    # JieLi channel: vendor-specific; the RCSP transport envelope is decoded, the command payload stays raw
     j = [p for p in pk if p["classification"] == "vendor"]
-    assert any(p["opcode"] == "SABM" for p in j) and any(p["protocol"] == "JieLi (RFCOMM)" for p in j)
-    assert "غير مفككة" in by("JieLi (RFCOMM)")[0]["summary"]
+    assert any(p["opcode"] == "SABM" for p in j) and any(p["protocol"] == "JieLi RCSP (RFCOMM)" for p in j)
+    frame = by("JieLi RCSP (RFCOMM)")[0]
+    assert frame["classification"] == "vendor"
+    fr = frame["fields"]["rcsp_frames"][0]
+    assert fr["opcode_name"] == "DataCmd" and fr["is_command"] and fr["needs_reply"]
+    assert fr["sn"] == 0x05 and fr["xm_opcode"] == 0x22 and fr["data"] == "aa"
+    assert r["summary"]["rcsp"]["frames"] == 1 and r["summary"]["rcsp"]["commands"] == 1
     # HFP Apple battery extension
     hfp = by("HFP")[0]
     assert hfp["classification"] == "extension" and "70%" in hfp["summary"]
@@ -216,13 +223,19 @@ def test_research_headset_trial_correlates_live_capture(env):
 
 def test_analyze_upload(env):
     t = time.time()
-    data = bw.header() + bw.setup(t) + bw.passthrough(0x44, ts=t) + bw.rfcomm_uih(10, b"\xaa\xbb", ts=t)
+    # a complete RCSP notification frame on the JieLi channel: PushStartTtsCmd (0x11), SN=7, no data
+    rcsp = bytes.fromhex("fedcba" "80" "11" "0001" "07" "ef")
+    data = bw.header() + bw.setup(t) + bw.passthrough(0x44, ts=t) + bw.rfcomm_uih(10, rcsp, ts=t)
     st, body, _ = env.request("POST", "/api/capture/analyze", raw_body=data,
                               headers={"Content-Type": "application/octet-stream"})
     assert st == 200, body
     res = body["data"]
     assert res["datalink"] == 2001 and res["summary"]["passthrough"] == {"PLAY (السماعة)": 1}
     assert len(res["vendor_packets"]) == 1
+    # the RCSP envelope is decoded end-to-end and summarised for the advanced view
+    rc = res["summary"]["rcsp"]
+    assert rc["frames"] == 1 and rc["commands"] == 1 and rc["opcodes"].get("PushStartTtsCmd") == 1
+    assert rc["samples"][0]["opcode_name"] == "PushStartTtsCmd" and rc["samples"][0]["sn"] == 7
     # wrong content type / garbage are rejected cleanly
     st, body, _ = env.request("POST", "/api/capture/analyze", raw_body=data, headers={"Content-Type": "application/json"})
     assert st == 415
