@@ -492,54 +492,76 @@
         <div class="notice">
           <svg class="icon"><use href="#i-shield"/></svg>
           <div>
-            <strong>التحكم المتقدم — لا توجد أدوات تحكم هنا عمدًا</strong>
-            <p>هذه الوظائف تحتاج إلى بروتوكول JieLi الخاص بالجهاز. السماعة تُعلن عنه على RFCOMM 10:</p>
+            <strong>التحكم المتقدم — عرض للقراءة فقط، بلا إرسال</strong>
+            <p>هذه الوظائف تمر عبر بروتوكول JieLi RCSP الخاص. السماعة تُعلن عنه على RFCOMM 10:</p>
             <code class="uuid" dir="ltr">fe010000-1234-5678-abcd-00805f9b34fb</code>
-            <p>البروتوكول غير معروف، ولا يفتح الوكيل هذه القناة ولا يرسل إليها أي بايت. لا تحديث للبرنامج الداخلي، ولا أوامر خاصة بالمصنّع، ولا إعادة ضبط.</p>
+            <p>هذه الصفحة <strong>تعرض فقط</strong> ما يُفكّ من التقاط محفوظ وما وثّقه تحليل تطبيق oraimo الثابت. الوكيل لا يفتح هذه القناة، ولا يصادِق عليها، ولا يرسل أي بايت. القناة محمية بمصافحة مصادقة في مكتبة مغلقة، فلا تحديث للبرنامج الداخلي، ولا أوامر خاصة بالمصنّع، ولا إعادة ضبط.</p>
           </div>
         </div>
+        <article class="card">
+          <header class="card-head">
+            <h3><svg class="icon"><use href="#i-search"/></svg>فاحص إطارات RCSP — من التقاط محفوظ</h3>
+            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>قراءة فقط</span>
+          </header>
+          <p class="hint">يفكّ غلاف إطار RCSP فقط (البداية والعلَم والرمز والطول والرقم التسلسلي)، كما هو مُثبت في كود التطبيق. محتوى الأوامر يبقى خامًا لأن جدول الرموز وصيغة البيانات على السلك ما زالا مجهولين. حمّل ملفًا في «اكتشاف الإمكانيات ← وضع البحث ← تحليل التقاط محفوظ» ليظهر هنا.</p>
+          <div id="rcsp-inspector"></div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <h3><svg class="icon"><use href="#i-matrix"/></svg>خريطة الأوامر المعروفة</h3>
+            <span class="badge badge-unknown">محتمل — من كود التطبيق</span>
+          </header>
+          <p class="hint">مستخرجة ثابتًا من مكتبة JieLi في تطبيق oraimo (راجع <bdi dir="ltr">docs/jieli-rcsp-apk.md</bdi>). لم تُرصد على السماعة بعد، ولا يرسلها الوكيل. الأرقام قيم <bdi dir="ltr">type/op</bdi> كما في الكود.</p>
+          <div class="ref-grid">
+            <div class="ref-block">
+              <h4><svg class="icon"><use href="#i-sliders"/></svg>خصائص الجهاز (<bdi dir="ltr">GetSysInfo/SetSysInfo</bdi>)</h4>
+              <dl class="ref-list">
+                <div><dt><bdi dir="ltr">type 0</bdi></dt><dd>البطارية — قراءة فقط</dd></div>
+                <div><dt><bdi dir="ltr">type 1</bdi></dt><dd>مستوى الصوت — بايت واحد</dd></div>
+                <div><dt><bdi dir="ltr">type 2</bdi></dt><dd>معلومات الجهاز — قراءة فقط</dd></div>
+                <div><dt><bdi dir="ltr">type 4</bdi></dt><dd>المعادل <bdi dir="ltr">EQ</bdi> — وضع + قيم</dd></div>
+                <div><dt><bdi dir="ltr">type 11</bdi></dt><dd>الجهير والترددات العالية — عددان</dd></div>
+                <div><dt><bdi dir="ltr">type 12</bdi></dt><dd>قيم <bdi dir="ltr">EQ</bdi> المسبقة — قراءة</dd></div>
+                <div><dt><bdi dir="ltr">type 13</bdi></dt><dd>الوضع الصوتي (<bdi dir="ltr">ANC</bdi>/شفافية)</dd></div>
+                <div><dt><bdi dir="ltr">type 14</bdi></dt><dd>كل الأوضاع الصوتية — قراءة</dd></div>
+                <div><dt><bdi dir="ltr">type 22</bdi></dt><dd><bdi dir="ltr">Smart No-Pick</bdi></dd></div>
+                <div><dt><bdi dir="ltr">type 23</bdi></dt><dd>تقليل الضوضاء حسب المشهد</dd></div>
+                <div><dt><bdi dir="ltr">type 24</bdi></dt><dd>كشف الرياح</dd></div>
+                <div><dt><bdi dir="ltr">type 25</bdi></dt><dd><bdi dir="ltr">Vocal Booster</bdi></dd></div>
+              </dl>
+            </div>
+            <div class="ref-block">
+              <h4><svg class="icon"><use href="#i-play"/></svg>أوامر الوسائط (<bdi dir="ltr">FunctionCmd</bdi>، موسيقى <bdi dir="ltr">BT</bdi>)</h4>
+              <dl class="ref-list">
+                <div><dt><bdi dir="ltr">op 1</bdi></dt><dd>تشغيل / إيقاف مؤقت</dd></div>
+                <div><dt><bdi dir="ltr">op 2</bdi></dt><dd>المسار السابق</dd></div>
+                <div><dt><bdi dir="ltr">op 3</bdi></dt><dd>المسار التالي</dd></div>
+                <div><dt><bdi dir="ltr">op 4</bdi></dt><dd>وضع التشغيل التالي</dd></div>
+                <div><dt><bdi dir="ltr">op 5</bdi></dt><dd>وضع <bdi dir="ltr">EQ</bdi> التالي</dd></div>
+                <div><dt><bdi dir="ltr">op 6</bdi></dt><dd>ترجيع قصير</dd></div>
+                <div><dt><bdi dir="ltr">op 7</bdi></dt><dd>تقديم قصير</dd></div>
+              </dl>
+            </div>
+            <div class="ref-block">
+              <h4><svg class="icon"><use href="#i-pointer"/></svg>وظائف الأزرار (<bdi dir="ltr">Bluetrum KeyRequest</bdi>)</h4>
+              <p class="ref-note">إيماءات قابلة للتخصيص لكل زر (يسار/يمين — ضغطة/مزدوجة/ثلاثية/مطوّلة). عائلة أوامر مختلفة عن <bdi dir="ltr">RcspPacketParse</bdi>؛ لم يُحسم أيّها تستخدمه السماعة.</p>
+              <ul class="chip-list">
+                <li>بلا</li><li>استرجاع صوتي</li><li>المساعد الصوتي</li><li>السابق</li><li>التالي</li>
+                <li>رفع الصوت</li><li>خفض الصوت</li><li>تشغيل/إيقاف</li><li>وضع اللعب</li><li>وضع <bdi dir="ltr">ANC</bdi></li>
+                <li>حساسية اللمس: منخفضة/عادية/عالية</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
         <div class="feature-grid" id="feature-grid">
           <article class="feature" aria-disabled="true">
-            <span class="feature-icon"><svg class="icon"><use href="#i-eq"/></svg></span>
-            <h3><bdi dir="ltr">EQ</bdi> — المعادل الصوتي</h3>
-            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
-            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
-          </article>
-          <article class="feature" aria-disabled="true">
-            <span class="feature-icon"><svg class="icon"><use href="#i-bass"/></svg></span>
-            <h3><bdi dir="ltr">Bass</bdi> — تعزيز الترددات المنخفضة</h3>
-            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
-            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
-          </article>
-          <article class="feature" aria-disabled="true">
-            <span class="feature-icon"><svg class="icon"><use href="#i-treble"/></svg></span>
-            <h3><bdi dir="ltr">Treble</bdi> — الترددات العالية</h3>
-            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
-            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
-          </article>
-          <article class="feature" aria-disabled="true">
-            <span class="feature-icon"><svg class="icon"><use href="#i-pointer"/></svg></span>
-            <h3><bdi dir="ltr">Button Remapping</bdi> — تخصيص الأزرار</h3>
-            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
-            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
-          </article>
-          <article class="feature" aria-disabled="true">
-            <span class="feature-icon"><svg class="icon"><use href="#i-device-settings"/></svg></span>
-            <h3><bdi dir="ltr">Device Settings</bdi> — إعدادات الجهاز</h3>
-            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
-            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
-          </article>
-          <article class="feature" aria-disabled="true">
-            <span class="feature-icon"><svg class="icon"><use href="#i-info"/></svg></span>
-            <h3><bdi dir="ltr">Firmware Information</bdi> — معلومات البرنامج الداخلي</h3>
-            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
-            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
-          </article>
-          <article class="feature" aria-disabled="true">
             <span class="feature-icon"><svg class="icon"><use href="#i-cpu"/></svg></span>
-            <h3><bdi dir="ltr">Firmware Update</bdi> — تحديث البرنامج الداخلي</h3>
+            <h3><bdi dir="ltr">Firmware Update / OTA</bdi> — تحديث البرنامج الداخلي</h3>
             <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
             <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
+            <p class="ref-note">خارج نطاق المشروع عمدًا: تحديث البرنامج الداخلي وإعادة الضبط لن يُنفَّذا حتى لو ثبت البروتوكول.</p>
           </article>
         </div>
         <article class="card">

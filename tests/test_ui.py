@@ -115,13 +115,19 @@ def test_log_diagnostics_advanced(browser, env):
 
     page.goto(f"{env.base}/#/advanced")
     expect(page.locator("#page-title")).to_have_text("التحكم المتقدم")
+    # the advanced view is now a read-only RCSP inspector plus a known-command reference
+    expect(page.locator("#rcsp-inspector")).to_be_visible()
+    expect(page.locator("#rcsp-inspector")).to_contain_text("لم تُحلَّل أي التقاطات بعد")  # no capture uploaded yet
+    ref = page.locator("#view-advanced .ref-block")
+    expect(ref).to_have_count(3)
+    for name in ("GetSysInfo", "FunctionCmd", "KeyRequest"):
+        expect(page.locator("#view-advanced .ref-block", has_text=name)).to_have_count(1)
+    # firmware update / OTA stays deliberately locked and out of scope
     features = page.locator(".feature")
-    expect(features).to_have_count(7)
-    for name in ("EQ", "Bass", "Treble", "Button Remapping", "Device Settings", "Firmware Information", "Firmware Update"):
-        expect(page.locator(".feature", has_text=name)).to_have_count(1)
-    for i in range(7):
-        expect(features.nth(i)).to_have_attribute("aria-disabled", "true")
-        expect(features.nth(i)).to_contain_text("لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد")
+    expect(features).to_have_count(1)
+    expect(features.first).to_have_attribute("aria-disabled", "true")
+    expect(features.first).to_contain_text("لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد")
+    # invariant: the advanced view never exposes an interactive control (read-only, never sends)
     assert page.locator("#view-advanced button, #view-advanced input, #view-advanced select").count() == 0
     assert not page.problems, page.problems
 

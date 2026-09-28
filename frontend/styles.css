@@ -805,6 +805,25 @@ input[type="range"]::-moz-range-thumb {
 .kv-list .v { text-align: end; font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
 .kv-list .v .st, .kv-list .v .cls { margin-inline-start: 6px; }
 
+/* Advanced view: RCSP inspector + known-command reference */
+.ref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 12px; }
+.ref-block h4 { display: flex; align-items: center; gap: 8px; font-size: 0.92rem; margin: 0 0 8px; }
+.ref-block h4 .icon { color: var(--accent); }
+.ref-list { margin: 0; padding: 0; }
+.ref-list > div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px dashed var(--border); font-size: 0.86rem; }
+.ref-list > div:last-child { border-bottom: 0; }
+.ref-list dt { margin: 0; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+.ref-list dd { margin: 0; text-align: end; overflow-wrap: anywhere; }
+.ref-note { font-size: 0.8rem; color: var(--muted); margin: 6px 0 0; }
+.chip-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-list li { font-size: 0.8rem; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-2); }
+.rcsp-stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+.rcsp-stat { flex: 1 1 auto; min-width: 96px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; text-align: center; }
+.rcsp-stat b { display: block; font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+.rcsp-stat span { font-size: 0.76rem; color: var(--muted); }
+.rcsp-op { display: inline-block; margin: 0 6px 6px 0; font-size: 0.8rem; padding: 3px 9px; border-radius: 999px; background: var(--unk-soft); color: var(--unk); }
+.rcsp-op code { font-family: var(--mono); }
+
 .scan-steps { list-style: none; margin: 0; padding: 0; }
 .scan-steps li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 10px 0; border-bottom: 1px dashed var(--border); font-size: 0.9rem; }
 .scan-steps li:last-child { border-bottom: 0; }
