@@ -1,0 +1,3 @@
+# Optional: observe headset button presses (read-only) via BlueZ's AVRCP input device.
+# Needs read access to /dev/input/event* (usually the "input" group).
+evdev>=1.6

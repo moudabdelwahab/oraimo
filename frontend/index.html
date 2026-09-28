@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0b0d14">
+  <title>متحكم Necklace</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="g-accent" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#8b7bff"/><stop offset="1" stop-color="#2dd4d8"/>
+      </linearGradient>
+    </defs>
+    <symbol id="i-necklace" viewBox="0 0 24 24"><path d="M3 3c0 7.5 4 12 9 12s9-4.5 9-12"/><path d="M6.4 11.2 6 16.5"/><path d="M17.6 11.2 18 16.5"/><circle cx="6" cy="18.8" r="2.2"/><circle cx="18" cy="18.8" r="2.2"/></symbol>
+    <symbol id="i-bluetooth" viewBox="0 0 24 24"><path d="m7 7 10 10-5 5V2l5 5L7 17"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" class="fill"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4.2" height="15" rx="1.2" class="fill"/><rect x="13.8" y="4.5" width="4.2" height="15" rx="1.2" class="fill"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="m16 9 6 6"/><path d="m22 9-6 6"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36L21 8"/><path d="M21 3v5h-5"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><path d="M8 12h8"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4.5"/><path d="M12 8h.01"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 8L9 4l-3 8H2"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h12"/><path d="M9 12h12"/><path d="M9 18h12"/><path d="M4 6h.01"/><path d="M4 12h.01"/><path d="M4 18h.01"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1.5 14h5"/><path d="M9.5 8h5"/><path d="M17.5 16h5"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3"/><path d="M12 18.5v3"/><path d="m5.3 5.3 2.1 2.1"/><path d="m16.6 16.6 2.1 2.1"/><path d="M2.5 12h3"/><path d="M18.5 12h3"/><path d="m5.3 18.7 2.1-2.1"/><path d="m16.6 7.4 2.1-2.1"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.2"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a3 3 0 0 1 5.8 1c0 2-3 2.3-3 4.2"/><path d="M12 17.2h.01"/></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2v3"/><path d="M15 2v3"/><path d="M9 19v3"/><path d="M15 19v3"/><path d="M2 9h3"/><path d="M2 15h3"/><path d="M19 9h3"/><path d="M19 15h3"/></symbol>
+    <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 12c2-3.5 4-3.5 6 0s4 3.5 6 0 4-3.5 6 0"/><path d="M2 17c2-3.5 4-3.5 6 0s4 3.5 6 0 4-3.5 6 0" opacity=".45"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6"/><path d="M10 3v6.2L4.3 18.6A2 2 0 0 0 6 21.6h12a2 2 0 0 0 1.7-3L14 9.2V3"/><path d="M7.5 15h9"/></symbol>
+    <symbol id="i-eq" viewBox="0 0 24 24"><path d="M5 20v-6"/><path d="M5 10V4"/><path d="M12 20v-9"/><path d="M12 7V4"/><path d="M19 20v-4"/><path d="M19 12V4"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="9" r="2"/><circle cx="19" cy="14" r="2"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></symbol>
+    <symbol id="i-pointer" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" opacity=".5"/><path d="M12 1.5v2"/><path d="M12 20.5v2"/><path d="M1.5 12h2"/><path d="M20.5 12h2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v6c0 4.7 3.2 7.8 7.5 9 4.3-1.2 7.5-4.3 7.5-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 2v5"/><path d="M15 2v5"/><path d="M6 7h12v4a6 6 0 0 1-12 0z"/><path d="M12 17v5"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+    <symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5" opacity=".6"/><path d="M12 12 19 5"/><circle cx="12" cy="12" r="1.3" class="fill"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-matrix" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M9 4v16"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/></symbol>
+    <symbol id="i-record" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4" class="fill"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" class="fill"/></symbol>
+    <symbol id="i-skip-next" viewBox="0 0 24 24"><path d="M6 5.5v13l9-6.5z" class="fill"/><path d="M18 5v14"/></symbol>
+    <symbol id="i-skip-prev" viewBox="0 0 24 24"><path d="M18 5.5v13l-9-6.5z" class="fill"/><path d="M6 5v14"/></symbol>
+    <symbol id="i-bass" viewBox="0 0 24 24"><path d="M3 12h2l2-6 3 12 3-9 2 5 2-2h4"/></symbol>
+    <symbol id="i-treble" viewBox="0 0 24 24"><path d="M3 12h3l1.5-3 1.5 6 1.5-8 1.5 10 1.5-7 1.5 4 1.5-2H21"/></symbol>
+    <symbol id="i-device-settings" viewBox="0 0 24 24"><path d="M3 3c0 7.5 4 12 9 12s9-4.5 9-12"/><circle cx="18" cy="18.5" r="3"/><path d="M18 14v1.5"/><path d="M18 21.5V23"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+
+  <div class="app">
+    <aside class="sidebar" aria-label="التنقل الرئيسي">
+      <div class="brand">
+        <span class="brand-mark"><svg class="icon"><use href="#i-necklace"/></svg></span>
+        <span class="brand-text">
+          <strong>متحكم Necklace</strong>
+          <small>لوحة تحكم محلية للسماعة</small>
+        </span>
+      </div>
+      <nav class="nav" id="nav">
+        <a href="#/dashboard" data-route="dashboard"><svg class="icon"><use href="#i-grid"/></svg><span>لوحة التحكم</span></a>
+        <a href="#/discovery" data-route="discovery"><svg class="icon"><use href="#i-radar"/></svg><span>اكتشاف الإمكانيات</span></a>
+        <a href="#/device" data-route="device"><svg class="icon"><use href="#i-info"/></svg><span>معلومات الجهاز</span></a>
+        <a href="#/diagnostics" data-route="diagnostics"><svg class="icon"><use href="#i-activity"/></svg><span>التشخيص</span></a>
+        <a href="#/log" data-route="log"><svg class="icon"><use href="#i-list"/></svg><span>سجل الأحداث</span></a>
+        <a href="#/advanced" data-route="advanced"><svg class="icon"><use href="#i-sliders"/></svg><span>التحكم المتقدم</span><em class="nav-tag">قيد البحث</em></a>
+        <a href="#/settings" data-route="settings"><svg class="icon"><use href="#i-settings"/></svg><span>الإعدادات</span></a>
+      </nav>
+      <div class="agent-status" id="agent-status" data-state="connecting">
+        <span class="dot"></span>
+        <span class="agent-text"><strong>الوكيل المحلي</strong><small id="agent-status-text">جارٍ الاتصال…</small></span>
+      </div>
+    </aside>
+
+    <main id="main" class="main" tabindex="-1">
+      <header class="topbar">
+        <div class="topbar-title">
+          <span class="topbar-mark"><svg class="icon"><use href="#i-necklace"/></svg></span>
+          <div>
+            <h1 id="page-title">لوحة التحكم</h1>
+            <p id="page-subtitle">التحكم في سماعة Oraimo Necklace Lite عبر الوكيل المحلي</p>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <span class="agent-chip" id="agent-chip" data-state="connecting"><span class="dot"></span><span id="agent-chip-text">الوكيل</span></span>
+          <button class="btn btn-soft" id="btn-refresh" type="button"><svg class="icon"><use href="#i-refresh"/></svg><span>تحديث الحالة</span></button>
+        </div>
+      </header>
+
+      <div class="banners" id="banners" aria-live="polite"></div>
+
+      <!-- ============================== لوحة التحكم ============================== -->
+      <section class="view" id="view-dashboard" data-view="dashboard" aria-label="لوحة التحكم">
+        <div class="dash">
+          <article class="card hero" id="hero" data-conn="unknown">
+            <div class="hero-visual" aria-hidden="true">
+              <div class="halo"></div>
+              <svg class="necklace-art" viewBox="0 0 220 180">
+                <defs>
+                  <linearGradient id="g-band" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#9d8cff"/><stop offset="1" stop-color="#34d6db"/>
+                  </linearGradient>
+                  <radialGradient id="g-bud" cx=".35" cy=".3" r=".8">
+                    <stop offset="0" stop-color="#3a4056"/><stop offset="1" stop-color="#151823"/>
+                  </radialGradient>
+                </defs>
+                <path class="band-shadow" d="M30 22c0 70 36 108 80 108s80-38 80-108"/>
+                <path class="band" d="M30 22c0 70 36 108 80 108s80-38 80-108"/>
+                <rect class="pod" x="44" y="78" width="22" height="36" rx="10" transform="rotate(-24 55 96)"/>
+                <rect class="pod" x="154" y="78" width="22" height="36" rx="10" transform="rotate(24 165 96)"/>
+                <path class="cable" d="M52 112c-6 14-8 26-6 38"/>
+                <path class="cable" d="M168 112c6 14 8 26 6 38"/>
+                <circle class="bud" cx="46" cy="158" r="12"/>
+                <circle class="bud" cx="174" cy="158" r="12"/>
+                <circle class="led" cx="165" cy="92" r="3"/>
+              </svg>
+            </div>
+
+            <div class="hero-info">
+              <div class="hero-info-top">
+                <span class="info-icon" aria-hidden="true"><svg class="icon"><use href="#i-necklace"/></svg></span>
+                <span class="status-pill" id="conn-pill" data-state="unknown" role="status">
+                  <span class="dot"></span><span id="conn-label">غير معروف</span>
+                </span>
+              </div>
+              <h2 class="device-name" id="dev-name">Oraimo Necklace Lite</h2>
+              <p class="device-addr"><bdi dir="ltr" id="dev-addr">28:52:E0:0F:92:0A</bdi></p>
+              <div class="chips">
+                <span class="chip"><svg class="icon"><use href="#i-bluetooth"/></svg><span>نوع الاتصال:</span> <bdi id="conn-type">BR/EDR</bdi></span>
+                <span class="chip"><span>حالة Bluetooth:</span> <span id="bt-state">—</span></span>
+                <span class="chip"><span>آخر تحديث:</span> <time id="updated-at">—</time></span>
+              </div>
+            </div>
+
+            <div class="hero-actions">
+              <button class="btn btn-primary" id="btn-reconnect" type="button">
+                <svg class="icon"><use href="#i-link"/></svg><span id="btn-reconnect-label">إعادة الاتصال</span>
+              </button>
+              <p class="hint" id="reconnect-hint"></p>
+            </div>
+
+            <section class="tile tile-media" aria-labelledby="media-title">
+              <header class="tile-head">
+                <h3 id="media-title"><svg class="icon"><use href="#i-play"/></svg>التشغيل</h3>
+                <span class="play-state" id="play-state" data-state="unknown" role="status">غير معروف</span>
+              </header>
+              <div class="media-buttons">
+                <button class="btn-media" id="btn-play" type="button">
+                  <svg class="icon"><use href="#i-play"/></svg><span>تشغيل</span>
+                </button>
+                <button class="btn-media" id="btn-pause" type="button">
+                  <svg class="icon"><use href="#i-pause"/></svg><span>إيقاف مؤقت</span>
+                </button>
+              </div>
+              <div class="media-meta">
+                <span class="meta-item"><svg class="icon"><use href="#i-monitor"/></svg><span>المشغل:</span> <bdi id="media-player">—</bdi></span>
+                <span class="meta-item"><svg class="icon"><use href="#i-waves"/></svg><span id="media-stream">—</span></span>
+              </div>
+              <p class="hint" id="media-hint"></p>
+            </section>
+
+            <section class="tile tile-volume" aria-labelledby="vol-title">
+              <header class="tile-head">
+                <h3 id="vol-title"><svg class="icon"><use href="#i-volume"/></svg>مستوى الصوت</h3>
+                <output class="big-value" id="vol-value" for="vol-slider">—</output>
+              </header>
+              <div class="vol-row">
+                <button class="icon-btn" id="btn-vol-down" type="button" aria-label="خفض الصوت" title="خفض الصوت">
+                  <svg class="icon"><use href="#i-minus"/></svg>
+                </button>
+                <div class="slider-wrap">
+                  <input type="range" id="vol-slider" min="0" max="100" step="1" value="0" aria-label="مستوى الصوت">
+                </div>
+                <button class="icon-btn" id="btn-vol-up" type="button" aria-label="رفع الصوت" title="رفع الصوت">
+                  <svg class="icon"><use href="#i-plus"/></svg>
+                </button>
+              </div>
+              <div class="vol-extra">
+                <button class="btn btn-soft btn-sm" id="btn-mute" type="button" disabled aria-describedby="mute-hint" title="AVRCP لهذه السماعة يدعم مستوى الصوت المطلق فقط">
+                  <svg class="icon"><use href="#i-mute"/></svg><span>كتم الصوت</span>
+                </button>
+                <span class="verify-tag" id="vol-verify" hidden></span>
+              </div>
+              <p class="hint" id="mute-hint">الكتم غير متاح: لا توجد واجهة كتم مؤكدة في BlueZ لهذه السماعة.</p>
+              <p class="hint" id="vol-hint"></p>
+            </section>
+
+            <section class="tile tile-battery" aria-labelledby="bat-title">
+              <header class="tile-head">
+                <h3 id="bat-title">البطارية</h3>
+              </header>
+              <div class="battery" id="battery" data-level="unknown">
+                <svg class="battery-svg" viewBox="0 0 72 36" aria-hidden="true">
+                  <rect class="bat-body" x="2" y="4" width="60" height="28" rx="7"/>
+                  <rect class="bat-nub" x="64" y="12" width="5" height="12" rx="2"/>
+                  <rect class="bat-fill" id="bat-fill" x="6" y="8" width="0" height="20" rx="4"/>
+                  <text class="bat-q" x="32" y="24" text-anchor="middle">?</text>
+                </svg>
+                <div class="battery-text">
+                  <strong class="big-value" id="bat-value">—</strong>
+                  <span class="bat-level" id="bat-level">غير معروفة</span>
+                </div>
+              </div>
+              <p class="hint" id="bat-hint"></p>
+            </section>
+          </article>
+
+          <aside class="dash-side">
+            <article class="card">
+              <header class="card-head">
+                <h3>القدرات الحالية</h3>
+                <a class="link" href="#/diagnostics">التشخيص الكامل<svg class="icon"><use href="#i-chevron"/></svg></a>
+              </header>
+              <ul class="cap-summary" id="cap-summary"></ul>
+            </article>
+            <article class="card">
+              <header class="card-head">
+                <h3>آخر الأحداث</h3>
+                <a class="link" href="#/log">سجل الأحداث<svg class="icon"><use href="#i-chevron"/></svg></a>
+              </header>
+              <ol class="recent-events" id="recent-events"></ol>
+            </article>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================== اكتشاف إمكانيات السماعة ============================== -->
+      <section class="view" id="view-discovery" data-view="discovery" aria-label="اكتشاف إمكانيات السماعة" hidden>
+        <article class="card disc-head">
+          <div class="disc-id">
+            <span class="info-icon show"><svg class="icon"><use href="#i-necklace"/></svg></span>
+            <div class="disc-id-text">
+              <div class="disc-id-top">
+                <h2 id="d-name">oraimo Necklace Lite</h2>
+                <span class="status-pill" id="d-conn" data-state="unknown"><span class="dot"></span><span id="d-conn-label">غير معروف</span></span>
+              </div>
+              <p><bdi dir="ltr" id="d-addr">28:52:E0:0F:92:0A</bdi> · <span id="d-maker">Layon International Electronic &amp; Telecom</span> · <span id="d-chip">Zhuhai Jieli Technology</span></p>
+              <p class="hint" id="d-profiles"></p>
+            </div>
+          </div>
+          <div class="disc-actions">
+            <button class="btn btn-primary" id="btn-safe-scan" type="button"><svg class="icon"><use href="#i-search"/></svg><span>فحص آمن</span></button>
+            <p class="hint" id="scan-status">قراءة فقط: SDP وD-Bus وUUIDs. لا تُفتح أي قناة ولا تُرسل أوامر خاصة بالمصنّع.</p>
+          </div>
+        </article>
+
+        <div class="legend" aria-label="دلالات الحالات">
+          <span class="lg lg-conn-on">متصل</span><span class="lg lg-conn-off">غير متصل</span>
+          <span class="lg lg-present">الخدمة موجودة</span><span class="lg lg-unavailable">الخدمة غير متاحة</span>
+          <span class="lg lg-confirmed">الوظيفة مؤكدة</span><span class="lg lg-advertised">الوظيفة معلنة فقط</span><span class="lg lg-unknown">الوظيفة غير معروفة</span>
+        </div>
+
+        <div class="subtabs" role="tablist" aria-label="أقسام الاكتشاف" id="disc-tabs">
+          <button type="button" role="tab" data-dtab="matrix"><svg class="icon"><use href="#i-matrix"/></svg><span>مصفوفة الإمكانيات</span></button>
+          <button type="button" role="tab" data-dtab="services"><svg class="icon"><use href="#i-layers"/></svg><span>الخدمات والقنوات</span></button>
+          <button type="button" role="tab" data-dtab="profiles"><svg class="icon"><use href="#i-bluetooth"/></svg><span>البروفايلات</span></button>
+          <button type="button" role="tab" data-dtab="research"><svg class="icon"><use href="#i-flask"/></svg><span>وضع البحث</span></button>
+          <button type="button" role="tab" data-dtab="dlog"><svg class="icon"><use href="#i-list"/></svg><span>السجل التفصيلي</span></button>
+        </div>
+
+        <div class="dpanel" data-dpanel="matrix">
+          <article class="card">
+            <header class="card-head"><h3>مصفوفة الإمكانيات</h3><span class="card-meta" id="matrix-meta"></span></header>
+            <p class="card-note">«مؤكدة» = شوهدت في الالتقاط أو تحقق منها الوكيل أثناء التشغيل. «معلنة فقط» = مذكورة في SDP أو قدرات AVRCP دون دليل عمل. «موجودة» = الخدمة مسجلة، ولا يعني ذلك أن بروتوكولها معروف.</p>
+            <div class="table-wrap"><table class="rtable" id="matrix-table">
+              <thead><tr><th>الوظيفة</th><th>الحالة</th><th>المصدر</th><th>طريقة الاختبار</th><th>آمنة؟</th></tr></thead>
+              <tbody></tbody>
+            </table></div>
+          </article>
+          <article class="card">
+            <header class="card-head"><h3>نتيجة آخر فحص آمن</h3><span class="card-meta" id="scan-meta">لم يُجرَ فحص بعد</span></header>
+            <ul class="scan-steps" id="scan-steps"></ul>
+          </article>
+        </div>
+
+        <div class="dpanel" data-dpanel="services" hidden>
+          <article class="card">
+            <header class="card-head"><h3>خدمات SDP</h3><span class="card-meta" id="svc-meta"></span></header>
+            <div class="table-wrap"><table class="rtable" id="svc-table">
+              <thead><tr><th>الخدمة</th><th>UUID</th><th>القناة</th><th>البروفايل</th><th>الحالة</th></tr></thead>
+              <tbody></tbody>
+            </table></div>
+          </article>
+          <div class="grid-2">
+            <article class="card">
+              <header class="card-head"><h3>قنوات RFCOMM</h3></header>
+              <p class="card-note">من SDP فقط. لم تُفتح أي قناة لفحص «توفرها»، لأن الفتح نفسه اتصال بالجهاز.</p>
+              <ul class="kv-list" id="rfcomm-list"></ul>
+            </article>
+            <article class="card">
+              <header class="card-head"><h3>قنوات L2CAP</h3></header>
+              <p class="card-note">أرقام CID من الالتقاط؛ BlueZ لا يعرضها. تظهر القنوات الحية في «وضع البحث» عند تشغيل btmon.</p>
+              <ul class="kv-list" id="l2cap-list"></ul>
+            </article>
+          </div>
+          <div class="grid-2">
+            <article class="card">
+              <header class="card-head"><h3>UUIDs المعلنة (BlueZ)</h3></header>
+              <ul class="kv-list" id="uuid-list"></ul>
+            </article>
+            <article class="card">
+              <header class="card-head"><h3>كائنات BlueZ وأجهزة الإدخال وGATT</h3></header>
+              <ul class="kv-list" id="objects-list"></ul>
+            </article>
+          </div>
+        </div>
+
+        <div class="dpanel" data-dpanel="profiles" hidden>
+          <div class="grid-3">
+            <article class="card" id="avrcp-card">
+              <header class="card-head"><h3>AVRCP القياسي</h3><span class="badge badge-available" id="avrcp-badge">AVRCP 1.5</span></header>
+              <ul class="kv-list" id="avrcp-list"></ul>
+            </article>
+            <article class="card" id="hid-card">
+              <header class="card-head"><h3>HID</h3></header>
+              <p class="state-line advertised" id="hid-status">معلن لكنه غير متاح حاليًا / يحتاج اختبار اتصال آمن</p>
+              <div id="hid-reports"></div>
+              <ul class="kv-list" id="hid-notes"></ul>
+            </article>
+            <article class="card" id="jieli-card">
+              <header class="card-head"><h3>خدمة JieLi المخصصة</h3><span class="badge badge-unavailable"><svg class="icon"><use href="#i-lock"/></svg>لا تواصل</span></header>
+              <p class="state-line present" id="jieli-status">خدمة مخصصة من الشركة - البروتوكول غير معروف</p>
+              <ul class="kv-list" id="jieli-list"></ul>
+            </article>
+          </div>
+        </div>
+
+        <div class="dpanel" data-dpanel="research" hidden>
+          <div class="grid-2">
+            <article class="card">
+              <header class="card-head"><h3><svg class="icon"><use href="#i-record"/></svg>مصدر الالتقاط (btmon)</h3><span class="badge" id="cap-badge">—</span></header>
+              <p class="card-note">يقرأ الوكيل ملف btmon فقط، ولا يلمس الراديو. لبدء الالتقاط نفّذ في طرفية:</p>
+              <div class="cmd"><code dir="ltr" id="cap-cmd">sudo btmon -w …</code><button class="icon-btn sm" id="btn-copy-cmd" type="button" aria-label="نسخ الأمر" title="نسخ الأمر"><svg class="icon"><use href="#i-copy"/></svg></button></div>
+              <p class="hint warn">ملف الالتقاط يحتوي على مفاتيح الربط وحركة كل أجهزتك. أوقف btmon بعد الانتهاء (Ctrl+C)، ولا تشارك الملف.</p>
+              <dl class="info-list compact" id="cap-info"></dl>
+            </article>
+            <article class="card">
+              <header class="card-head"><h3><svg class="icon"><use href="#i-flask"/></svg>وضع البحث</h3><span class="badge" id="research-badge">متوقف</span></header>
+              <p class="card-note">اختر إجراءً آمنًا، ثم يربط الوكيل بينه وبين الحزم التي تظهر بعده. «من الحاسوب» ينفذ أمرًا مسموحًا (MPRIS أو مستوى الصوت عبر BlueZ). «من السماعة» لا يرسل شيئًا: اضغط زر السماعة خلال <span id="hs-window">6</span> ثوانٍ.</p>
+              <button class="btn btn-primary" id="btn-research" type="button"><svg class="icon"><use href="#i-record"/></svg><span id="btn-research-label">بدء وضع البحث</span></button>
+            </article>
+          </div>
+          <article class="card">
+            <header class="card-head"><h3>الإجراءات الآمنة</h3></header>
+            <div class="action-grid" id="action-grid"></div>
+          </article>
+          <article class="card">
+            <header class="card-head"><h3>التجارب والحزم المرتبطة</h3><span class="card-meta" id="trials-meta"></span></header>
+            <div id="trials"></div>
+          </article>
+          <article class="card">
+            <header class="card-head"><h3><svg class="icon"><use href="#i-upload"/></svg>تحليل التقاط محفوظ</h3></header>
+            <p class="card-note">ملف btsnoop من btmon أو سجل HCI من Android. يُحلَّل محليًا دون أي تواصل مع السماعة.</p>
+            <label class="file-drop"><input type="file" id="capture-file" accept=".btsnoop,.cfa,.log,.snoop,application/octet-stream"><span><svg class="icon"><use href="#i-upload"/></svg>اختر ملف الالتقاط</span></label>
+            <div id="analysis"></div>
+          </article>
+        </div>
+
+        <div class="dpanel" data-dpanel="dlog" hidden>
+          <article class="card log-card">
+            <header class="card-head log-toolbar">
+              <div class="field">
+                <label for="dlog-filter">التصفية</label>
+                <select id="dlog-filter">
+                  <option value="all">الكل</option>
+                  <option value="vendor">خاص بالمصنّع فقط</option>
+                  <option value="avrcp">AVRCP</option>
+                  <option value="scan">الفحص الآمن</option>
+                  <option value="research">وضع البحث والاكتشافات</option>
+                </select>
+              </div>
+              <div class="toolbar-actions">
+                <button class="btn btn-soft btn-sm" id="btn-dlog-export" type="button"><svg class="icon"><use href="#i-download"/></svg><span>تصدير السجل (JSON)</span></button>
+                <button class="btn btn-danger btn-sm" id="btn-dlog-clear" type="button"><svg class="icon"><use href="#i-trash"/></svg><span>مسح السجل</span></button>
+              </div>
+            </header>
+            <div class="table-wrap"><table class="rtable dlog" id="dlog-table">
+              <thead><tr><th>الوقت</th><th>النوع</th><th>القناة</th><th>الاتجاه</th><th>البيانات</th><th>النتيجة</th></tr></thead>
+              <tbody></tbody>
+            </table></div>
+            <p class="empty" id="dlog-empty" hidden>لا توجد أحداث بعد. شغّل «فحص آمن» أو btmon.</p>
+          </article>
+        </div>
+
+        <p class="disc-foot"><a class="link" href="#/advanced">التحكم المتقدم (غير متاح بعد)<svg class="icon"><use href="#i-chevron"/></svg></a></p>
+      </section>
+
+      <!-- ============================== معلومات الجهاز ============================== -->
+      <section class="view" id="view-device" data-view="device" aria-label="معلومات الجهاز" hidden>
+        <div class="grid-2">
+          <article class="card">
+            <header class="card-head">
+              <h3><svg class="icon ok"><use href="#i-check"/></svg>معلومات مؤكدة</h3>
+            </header>
+            <p class="card-note">من تحليل الالتقاط (necklace_report.md)، ومن BlueZ مباشرة عند الاتصال. المصدر مذكور بجانب كل قيمة.</p>
+            <dl class="info-list" id="info-confirmed"></dl>
+          </article>
+          <article class="card">
+            <header class="card-head">
+              <h3><svg class="icon muted"><use href="#i-help"/></svg>معلومات غير متاحة</h3>
+            </header>
+            <p class="card-note">قيم لم يثبتها الالتقاط ولا يعرضها BlueZ. لا تُعرض كأنها معروفة.</p>
+            <ul class="unknown-list" id="info-unknown"></ul>
+          </article>
+        </div>
+        <article class="card">
+          <header class="card-head">
+            <h3>الخدمات المعلنة</h3>
+            <span class="card-meta" id="uuids-source"></span>
+          </header>
+          <p class="card-note">خدمة مُعلنة في SDP لا تعني أنها تعمل. الحالة الفعلية في صفحة التشخيص.</p>
+          <ul class="service-list" id="service-list"></ul>
+        </article>
+      </section>
+
+      <!-- ============================== التشخيص ============================== -->
+      <section class="view" id="view-diagnostics" data-view="diagnostics" aria-label="التشخيص" hidden>
+        <div class="diag-summary" id="diag-summary"></div>
+        <article class="card">
+          <header class="card-head">
+            <h3>حالة القدرات</h3>
+            <button class="btn btn-soft btn-sm" id="btn-diag-refresh" type="button"><svg class="icon"><use href="#i-refresh"/></svg><span>إعادة الفحص</span></button>
+          </header>
+          <p class="card-note">«متاح» تعني أن الوكيل تحقق منها أثناء التشغيل. «غير معروف» تعني أنها معلنة أو مؤكدة في الالتقاط فقط، ولم يثبت عملها الآن.</p>
+          <ul class="diag-list" id="diag-list"></ul>
+        </article>
+        <div class="grid-2">
+          <article class="card">
+            <header class="card-head"><h3>النظام</h3></header>
+            <dl class="info-list compact" id="diag-system"></dl>
+          </article>
+          <article class="card">
+            <header class="card-head"><h3>تحقق أثناء التشغيل</h3></header>
+            <p class="card-note">قدرات لاحظ الوكيل عملها فعليًا خلال هذه الجلسة.</p>
+            <ul class="verified-list" id="diag-verified"></ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============================== سجل الأحداث ============================== -->
+      <section class="view" id="view-log" data-view="log" aria-label="سجل الأحداث" hidden>
+        <article class="card log-card">
+          <header class="card-head log-toolbar">
+            <div class="field">
+              <label for="log-filter">التصفية</label>
+              <select id="log-filter">
+                <option value="all">كل الأحداث</option>
+                <option value="connection">الاتصال</option>
+                <option value="battery">البطارية</option>
+                <option value="volume">مستوى الصوت</option>
+                <option value="playback">التشغيل</option>
+                <option value="buttons">أزرار السماعة</option>
+                <option value="system">النظام</option>
+                <option value="errors">التحذيرات والأخطاء</option>
+              </select>
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn btn-soft btn-sm" id="btn-export-json" type="button"><svg class="icon"><use href="#i-download"/></svg><span>تصدير السجل (JSON)</span></button>
+              <button class="btn btn-soft btn-sm" id="btn-export-txt" type="button"><svg class="icon"><use href="#i-download"/></svg><span>تصدير نصي</span></button>
+              <button class="btn btn-danger btn-sm" id="btn-clear-log" type="button"><svg class="icon"><use href="#i-trash"/></svg><span>مسح السجل</span></button>
+            </div>
+          </header>
+          <ol class="log-list" id="log-list" aria-live="polite" aria-relevant="additions"></ol>
+          <p class="empty" id="log-empty" hidden>لا توجد أحداث بعد.</p>
+        </article>
+      </section>
+
+      <!-- ============================== ميزات متقدمة ============================== -->
+      <!-- ============================== التحكم المتقدم ============================== -->
+      <section class="view" id="view-advanced" data-view="advanced" aria-label="التحكم المتقدم" hidden>
+        <div class="notice">
+          <svg class="icon"><use href="#i-shield"/></svg>
+          <div>
+            <strong>التحكم المتقدم — لا توجد أدوات تحكم هنا عمدًا</strong>
+            <p>هذه الوظائف تحتاج إلى بروتوكول JieLi الخاص بالجهاز. السماعة تُعلن عنه على RFCOMM 10:</p>
+            <code class="uuid" dir="ltr">fe010000-1234-5678-abcd-00805f9b34fb</code>
+            <p>البروتوكول غير معروف، ولا يفتح الوكيل هذه القناة ولا يرسل إليها أي بايت. لا تحديث للبرنامج الداخلي، ولا أوامر خاصة بالمصنّع، ولا إعادة ضبط.</p>
+          </div>
+        </div>
+        <div class="feature-grid" id="feature-grid">
+          <article class="feature" aria-disabled="true">
+            <span class="feature-icon"><svg class="icon"><use href="#i-eq"/></svg></span>
+            <h3><bdi dir="ltr">EQ</bdi> — المعادل الصوتي</h3>
+            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
+            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
+          </article>
+          <article class="feature" aria-disabled="true">
+            <span class="feature-icon"><svg class="icon"><use href="#i-bass"/></svg></span>
+            <h3><bdi dir="ltr">Bass</bdi> — تعزيز الترددات المنخفضة</h3>
+            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
+            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
+          </article>
+          <article class="feature" aria-disabled="true">
+            <span class="feature-icon"><svg class="icon"><use href="#i-treble"/></svg></span>
+            <h3><bdi dir="ltr">Treble</bdi> — الترددات العالية</h3>
+            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
+            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
+          </article>
+          <article class="feature" aria-disabled="true">
+            <span class="feature-icon"><svg class="icon"><use href="#i-pointer"/></svg></span>
+            <h3><bdi dir="ltr">Button Remapping</bdi> — تخصيص الأزرار</h3>
+            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
+            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
+          </article>
+          <article class="feature" aria-disabled="true">
+            <span class="feature-icon"><svg class="icon"><use href="#i-device-settings"/></svg></span>
+            <h3><bdi dir="ltr">Device Settings</bdi> — إعدادات الجهاز</h3>
+            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
+            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
+          </article>
+          <article class="feature" aria-disabled="true">
+            <span class="feature-icon"><svg class="icon"><use href="#i-info"/></svg></span>
+            <h3><bdi dir="ltr">Firmware Information</bdi> — معلومات البرنامج الداخلي</h3>
+            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
+            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
+          </article>
+          <article class="feature" aria-disabled="true">
+            <span class="feature-icon"><svg class="icon"><use href="#i-cpu"/></svg></span>
+            <h3><bdi dir="ltr">Firmware Update</bdi> — تحديث البرنامج الداخلي</h3>
+            <span class="badge badge-muted"><svg class="icon"><use href="#i-lock"/></svg>غير متاح</span>
+            <p>لم يتم اكتشاف بروتوكول آمن لهذه الوظيفة بعد</p>
+          </article>
+        </div>
+        <article class="card">
+          <header class="card-head"><h3><svg class="icon"><use href="#i-flask"/></svg>قيد البحث — كيف ستُكتشف هذه الوظائف بأمان</h3></header>
+          <ul class="research-list">
+            <li>التقاط سجل HCI من تطبيق oraimo الرسمي على Android أثناء تغيير كل إعداد على حدة، مع تدوين وقت كل تغيير.</li>
+            <li>رفع الملف إلى «اكتشاف الإمكانيات ← وضع البحث ← تحليل التقاط محفوظ» لفك الحزم ومقارنتها دون أي تواصل مع السماعة.</li>
+            <li>لن تُضاف أي وظيفة هنا إلا بعد توثيق شكل الرسائل في docs/protocol-status.md والتحقق منه.</li>
+          </ul>
+          <a class="link" href="#/discovery">اكتشاف إمكانيات السماعة<svg class="icon"><use href="#i-chevron"/></svg></a>
+        </article>
+      </section>
+
+      <!-- ============================== الإعدادات ============================== -->
+      <section class="view" id="view-settings" data-view="settings" aria-label="الإعدادات" hidden>
+        <div class="grid-2">
+          <article class="card">
+            <header class="card-head"><h3>المظهر</h3></header>
+            <div class="segmented" role="radiogroup" aria-label="السمة" id="theme-switch">
+              <button type="button" role="radio" data-theme-value="dark"><svg class="icon"><use href="#i-moon"/></svg><span>داكن</span></button>
+              <button type="button" role="radio" data-theme-value="light"><svg class="icon"><use href="#i-sun"/></svg><span>فاتح</span></button>
+              <button type="button" role="radio" data-theme-value="auto"><svg class="icon"><use href="#i-monitor"/></svg><span>تلقائي</span></button>
+            </div>
+            <p class="card-note">يُحفظ هذا الاختيار في هذا المتصفح فقط.</p>
+          </article>
+          <article class="card">
+            <header class="card-head"><h3>مشغل الوسائط المستهدف</h3></header>
+            <div class="field">
+              <label for="player-select">أزرار التشغيل والإيقاف تتحكم في:</label>
+              <select id="player-select"></select>
+            </div>
+            <p class="card-note">السماعة لا تحتوي على مشغل وسائط. عند الضغط على زرها تُرسل الأمر إلى هذا الجهاز، ويتحكم الوكيل بالطريقة نفسها في مشغل الوسائط المحلي عبر MPRIS.</p>
+          </article>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <header class="card-head"><h3>الوكيل المحلي</h3></header>
+            <dl class="info-list compact" id="agent-info"></dl>
+          </article>
+          <article class="card">
+            <header class="card-head"><h3><svg class="icon"><use href="#i-shield"/></svg>سياسة الأمان</h3></header>
+            <ul class="policy-list">
+              <li class="allow"><svg class="icon"><use href="#i-check"/></svg>مسموح: التشغيل، الإيقاف المؤقت، ضبط مستوى الصوت، إعادة الاتصال، اختيار المشغل، مسح السجل</li>
+              <li class="deny"><svg class="icon"><use href="#i-x"/></svg>ممنوع: أوامر HCI أو AVCTP أو RFCOMM الخام، الكتابة إلى خدمة JieLi، تحديث البرنامج الداخلي</li>
+              <li><svg class="icon"><use href="#i-lock"/></svg>يقبل الوكيل الطلبات من هذا الجهاز فقط (localhost)</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar" id="tabbar" aria-label="التنقل">
+      <a href="#/dashboard" data-route="dashboard"><svg class="icon"><use href="#i-grid"/></svg><span>الرئيسية</span></a>
+      <a href="#/device" data-route="device"><svg class="icon"><use href="#i-info"/></svg><span>الجهاز</span></a>
+      <a href="#/diagnostics" data-route="diagnostics"><svg class="icon"><use href="#i-activity"/></svg><span>التشخيص</span></a>
+      <a href="#/log" data-route="log"><svg class="icon"><use href="#i-list"/></svg><span>السجل</span></a>
+      <a href="#/discovery" data-route="discovery"><svg class="icon"><use href="#i-radar"/></svg><span>الاكتشاف</span></a>
+      <a href="#/settings" data-route="settings"><svg class="icon"><use href="#i-settings"/></svg><span>الإعدادات</span></a>
+    </nav>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="assertive" aria-atomic="false"></div>
+</body>
+</html>

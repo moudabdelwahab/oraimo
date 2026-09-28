@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""TEST-ONLY stand-in for `sdptool browse --xml --uuid U ADDR`.
+Prints the headset's real SDP records (converted from the capture) as sdptool XML."""
+import os
+import sys
+from pathlib import Path
+
+fx = Path(__file__).resolve().parent.parent / "fixtures"
+args = sys.argv[1:]
+log = os.environ.get("FAKE_SDPTOOL_LOG")
+if log:
+    with open(log, "a") as f:
+        f.write(" ".join(args) + "\n")
+if os.environ.get("FAKE_SDPTOOL_FAIL"):
+    print("Failed to connect to SDP server on 28:52:E0:0F:92:0A: Host is down", file=sys.stderr)
+    sys.exit(1)
+if len(args) != 5 or args[:4] not in (["browse", "--xml", "--uuid", "0x0100"], ["browse", "--xml", "--uuid", "0x1200"]):
+    print("unexpected arguments: " + " ".join(args), file=sys.stderr)
+    sys.exit(2)
+print(f"Browsing {args[4]} ...")
+print((fx / ("sdp_l2cap.xml" if args[3] == "0x0100" else "sdp_pnp.xml")).read_text())

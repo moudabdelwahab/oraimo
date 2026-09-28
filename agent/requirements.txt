@@ -1,0 +1,3 @@
+# Required
+aiohttp>=3.9,<4
+dbus-fast>=2.0
